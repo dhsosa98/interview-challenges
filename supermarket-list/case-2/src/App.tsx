@@ -1,6 +1,6 @@
-import type {Item} from "./types";
+import type { Item } from "./types";
 
-import {useEffect, useState} from "react";
+import { useEffect, useState } from "react";
 
 import styles from "./App.module.scss";
 import api from "./api";
@@ -14,21 +14,24 @@ function App() {
   const [isLoading, toggleLoading] = useState<boolean>(true);
 
   function handleToggle(id: Item["id"]) {
-    // Should implement
+    setItems(items.map(item => item.id === id ? { ...item, completed: !item.completed } : item));
   }
 
   function handleAdd(event: React.ChangeEvent<Form>) {
     event.preventDefault();
+    const value = event.target.text.value
+    if (!value) return
 
-    setItems((items) =>
-      items.concat({
+
+    setTimeout(()=>{setItems((items) => {
+      return items.concat({
         id: +new Date(),
         completed: false,
-        text: event.target.text.value,
-      }),
-    );
+        text: value,
+      })}
+  )},1000);
 
-    event.target.text.value = "";
+  event.target.text.value=""
   }
 
   function handleRemove(id: Item["id"]) {
@@ -56,9 +59,8 @@ function App() {
           <li
             key={item.id}
             className={item.completed ? styles.completed : ""}
-            onClick={() => handleToggle(item.id)}
           >
-            {item.text} <button onClick={() => handleRemove(item.id)}>[X]</button>
+            <span onClick={() => handleToggle(item.id)}>{item.text}</span> <button onClick={() => handleRemove(item.id)}>[Something X]</button>
           </li>
         ))}
       </ul>
